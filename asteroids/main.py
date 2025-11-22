@@ -3,10 +3,12 @@
 #use Ctrl+c in terminal to kill game
 
 import pygame
+import sys
+from logger import log_event
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
-from logger import log_state
+from logger import log_event, log_state
 from player import Player
 
 
@@ -37,6 +39,12 @@ def main():
                 return
 
         updatable.update(dt)
+
+        for obj in asteroids:
+            if obj.collides_with(player) == True:
+                log_event("player_hit")
+                print("Game over!")
+                sys.exit()
 
         screen.fill("black")
 
