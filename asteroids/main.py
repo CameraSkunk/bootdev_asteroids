@@ -1,16 +1,12 @@
-#Run "source .venv/bin/activate" in the asteroids folder
-#Run test using "uv run main.py" on command line.
-#use Ctrl+c in terminal to kill game
+import sys
 
 import pygame
-import sys
-from shot import Shot
-from logger import log_event
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from constants import SCREEN_HEIGHT, SCREEN_WIDTH
 from logger import log_event, log_state
 from player import Player
+from shot import Shot
 
 
 def main():
@@ -24,10 +20,9 @@ def main():
     shots = pygame.sprite.Group()
 
     Asteroid.containers = (asteroids, updatable, drawable)
+    Shot.containers = (shots, updatable, drawable)
     AsteroidField.containers = updatable
     asteroid_field = AsteroidField()
-
-    Shot.containers = (shots, updatable, drawable)
 
     Player.containers = (updatable, drawable)
 
@@ -44,11 +39,17 @@ def main():
 
         updatable.update(dt)
 
-        for obj in asteroids:
-            if obj.collides_with(player) == True:
+        for asteroid in asteroids:
+            if asteroid.collides_with(player):
                 log_event("player_hit")
                 print("Game over!")
                 sys.exit()
+
+        for shot in shots:
+            if asteroid.collides_with(shot):
+                log_event("asteroid_shot")
+                shot.kill()
+                asteroid.kill()
 
         screen.fill("black")
 
