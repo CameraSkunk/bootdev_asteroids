@@ -1,3 +1,6 @@
+# Activate before use: source .venv/bin/activate
+# Run Game: uv run -m main.py
+
 import sys
 
 import pygame
@@ -49,7 +52,7 @@ def main():
                 if asteroid.collides_with(shot):
                     log_event("asteroid_shot")
                     shot.kill()
-                    asteroid.kill()
+                    asteroid.split()
 
         screen.fill("black")
 
